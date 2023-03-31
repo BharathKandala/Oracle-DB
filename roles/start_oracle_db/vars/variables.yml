@@ -1,0 +1,15 @@
+---
+#variable for Start DB
+oracle_sid: "cdb1"
+oracle_base: "/u01/app/oracle"
+oracle_home: "/u01/app/oracle/product/19.3.0/db100"
+oracle_group: oinstall
+oracle_user: oracle
+oracle_stage: "/u01/stage/"
+
+env:
+  ORACLE_HOME: "{{ oracle_home }}"
+  ORACLE_BASE: "{{ oracle_base }}"
+  ORACLE_SID: "{{ oracle_sid }}"
+  #TNS_ADMIN: "{{ tns_admin }}"
+  PATH: "{{ oracle_home }}/bin:{{ oracle_home }}/OPatch:$PATH:/bin:/usr/bin::/usr/ccs/bin"

@@ -1,0 +1,40 @@
+---
+- name: Include Variables from vars folder
+  include_vars: ../vars/variables.yml
+  
+# - name: Template check_status
+#   become: yes 
+#   template:
+#     src: "../template/check_status.j2"
+#     dest: "{{ oracle_stage }}/check_status.sql"
+#     group: "{{ oracle_group }}"
+#     owner: "{{ oracle_user }}"
+#     mode: 0777
+#   tags: check_status
+  
+- name: Run check_status.sql
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: |
+    echo exit | sqlplus / as sysdba @{{ oracle_stage }}/check_status.sql
+  register: status_result1
+  environment: "{{ env }}"
+  tags: check_status
+    
+- debug: var=status_result1.stdout_lines
+  tags: check_status
+  
+- name: Shutdown database
+  become: yes
+  become_user: "{{ oracle_user }}"
+  shell: |
+    echo 'shutdown immediate;' | sqlplus / as sysdba
+  environment: "{{ env }}"
+  register: shutdown_output
+  when: "'OPEN' in status_result1.stdout_lines"
+  tags:
+    - shutdown
+  
+- debug: var=shutdown_output.stdout_lines
+  when: "'OPEN' in status_result1.stdout_lines"
+

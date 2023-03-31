@@ -1,0 +1,6 @@
+---
+- name: Oracle Database
+  hosts: all
+  gather_facts: false
+  roles:
+   - stop_oracle_db

@@ -1,41 +1,32 @@
 ---
 - name: Include Variables from vars folder
-  include_vars: ../vars/variables.yml
-  
-# - name: Template check_status
-#   become: yes 
-#   template:
-#     src: "../template/check_status.j2"
-#     dest: "{{ oracle_stage }}/check_status.sql"
-#     group: "{{ oracle_group }}"
-#     owner: "{{ oracle_user }}"
-#     mode: 0777
-#   tags: check_status
-  
+  ansible.builtin.include_vars: ../vars/variables.yml
 - name: Run check_status.sql
-  become: yes
+  become: true
   become_user: "{{ oracle_user }}"
-  shell: |
+  ansible.builtin.shell: |
     echo exit | sqlplus / as sysdba @{{ oracle_stage }}/check_status.sql
   register: status_result
   environment: "{{ env }}"
   tags: check_status
-    
-- debug: var=status_result.stdout_lines
+
+- ansible.builtin.debug:
+    var: status_result.stdout_lines
+    cmd: ""
   tags: check_status
-  
+
 - name: Start Oracle DB
-  become: yes
+  become: true
   become_user: "{{ oracle_user }}"
-  shell: |
+  ansible.builtin.shell: |
     echo 'startup;' | sqlplus / as sysdba
   environment: "{{ env }}"
   register: startdb_output
   when: "'OPEN' not in status_result.stdout_lines"
   tags:
     - startdb
-  
-- debug: var=startdb_output.stdout_lines
+
+- ansible.builtin.debug:
+    var: startdb_output.stdout_lines
+    cmd: ""
   when: "'OPEN' not in status_result.stdout_lines"
-
-

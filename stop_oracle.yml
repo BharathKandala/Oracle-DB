@@ -3,4 +3,4 @@
   hosts: all
   gather_facts: false
   roles:
-   - stop_oracle_db
+    - stop_oracle_db

@@ -17,3 +17,5 @@
 
 - ansible.builtin.debug:
     var: status_result1.stdout_lines
+
+- include_tasks: sample.yml

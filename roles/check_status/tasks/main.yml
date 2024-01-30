@@ -15,5 +15,5 @@
     cmd: ""
   tags: check_status
 
-- debug: 
+- ansible.builtin.debug:
     var: status_result1.stdout_lines

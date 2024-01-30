@@ -15,4 +15,5 @@
     cmd: ""
   tags: check_status
 
-- debug: var=status_result1.stdout_lines
+- debug: 
+    var: status_result1.stdout_lines
